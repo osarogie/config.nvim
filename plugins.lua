@@ -1,11 +1,9 @@
-local overrides = require("custom.configs.overrides")
-
+local overrides = require "custom.configs.overrides"
 
 local function add_plugin(name, config)
   return {
     name,
     config = config,
-    requires = { 'nvim-lua/plenary.nvim' }, -- An example dependency (plenary.nvim)
   }
 end
 
@@ -34,7 +32,7 @@ local plugins = {
   -- override plugin configs
   {
     "williamboman/mason.nvim",
-    opts = overrides.mason
+    opts = overrides.mason,
   },
 
   {
@@ -56,12 +54,6 @@ local plugins = {
     end,
   },
 
-  -- To make a plugin not be loaded
-  {
-    "NvChad/nvim-colorizer.lua",
-    enabled = false
-  },
-
   -- All NvChad plugins are lazy-loaded by default
   -- For a plugin to be loaded, you will need to set either `ft`, `cmd`, `keys`, `event`, or set `lazy = false`
   -- If you want a plugin to load on startup, add `lazy = false` to a plugin spec, for example
@@ -70,31 +62,98 @@ local plugins = {
   --   lazy = false,
   -- }
 
-
   -- Essential plugins
-  add_plugin('nvim-lua/popup.nvim'),
-  add_plugin('nvim-lua/plenary.nvim'),
+  add_plugin "nvim-lua/popup.nvim",
 
   -- Autocompletion and LSP
-  add_plugin('hrsh7th/nvim-cmp', function()
-    require('cmp').setup({
-      -- Add additional configuration for nvim-cmp here
-    })
-  end),
-  add_plugin('hrsh7th/cmp-buffer'),
-  add_plugin('hrsh7th/cmp-nvim-lsp'),
-  add_plugin('L3MON4D3/LuaSnip', function()
-    require('luasnip').config.setup({
+  -- {
+  --   "hrsh7th/nvim-cmp",
+  --   -- dependencies = {
+  --   --   {
+  --   --     "zbirenbaum/copilot-cmp",
+  --   --     config = function()
+  --   --       require("copilot_cmp").setup()
+  --   --     end,
+  --   --   },
+  --   -- },
+  --   config = function()
+  --     -- require('cmp').setup({
+
+  --     -- })
+  --     require('custom.configs.nvim-cmp')
+  --   end,
+  --   -- opts = {
+  --   --   sources = {
+  --   --     { name = "copilot",  group_index = 2 },
+  --   --     { name = "nvim_lsp", group_index = 2 },
+  --   --     { name = "luasnip",  group_index = 2 },
+  --   --     { name = "buffer",   group_index = 2 },
+  --   --     { name = "nvim_lua", group_index = 2 },
+  --   --     { name = "path",     group_index = 2 },
+  --   --   },
+  --   -- },
+  -- },
+  add_plugin("L3MON4D3/LuaSnip", function()
+    require("luasnip").config.setup {
       -- Add LuaSnip configuration here
-    })
+    }
   end),
 
   -- Git integration
-  add_plugin('lewis6991/gitsigns.nvim', function()
-    require('gitsigns').setup({
+  add_plugin("lewis6991/gitsigns.nvim", function()
+    require("gitsigns").setup {
       -- Add gitsigns configuration here
-    })
+    }
   end),
+  -- {
+  --   "zbirenbaum/copilot.lua",
+  --   -- Lazy load when event occurs. Events are triggered
+  --   -- as mentioned in:
+  --   -- https://vi.stackexchange.com/a/4495/20389
+  --   event = "InsertEnter",
+  --   -- You can also have it load at immediately at
+  --   -- startup by commenting above and uncommenting below:
+  --   -- lazy = false
+  --   -- opts = overrides.copilot,
+  --   config = function()
+  --     require("copilot").setup({
+  --       -- Add copilot configuration here
+  --     })
+  --   end,
+  -- },
+  {
+    "github/copilot.vim",
+    event = "InsertEnter",
+    config = function()
+      -- require("copilot").setup({
+      --   -- Add copilot configuration here
+      -- })
+    end,
+  },
+  -- {
+  --   "zbirenbaum/copilot-cmp",
+  --   config = function ()
+  --     require("copilot_cmp").setup()
+  --   end,
+  --   event = { "InsertEnter", "LspAttach" },
+  --   fix_pairs = true,
+  -- },
+  {
+    "sbdchd/neoformat",
+    lazy = false,
+  },
+
+  add_plugin "tpope/vim-fugitive",
+  add_plugin "Eliot00/git-lens.vim",
+  -- add_plugin("prettier/vim-prettier"),
+  {
+    "APZelos/blamer.nvim",
+    lazy = false,
+  },
+  {
+    "wellle/context.vim",
+    lazy = false,
+  },
 }
 
 return plugins

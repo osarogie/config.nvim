@@ -41,6 +41,7 @@ M.mason = {
     -- c/cpp stuff
     "clangd",
     "clang-format",
+    "rust-analyzer",
   },
 }
 
@@ -57,6 +58,18 @@ M.nvimtree = {
         git = true,
       },
     },
+  },
+}
+
+M.copilot = {
+  -- Possible configurable fields can be found on:
+  -- https://github.com/zbirenbaum/copilot.lua#setup-and-configuration
+  suggestion = {
+    -- enabled = false,
+    auto_trigger = true,
+  },
+  panel = {
+    enable = false,
   },
 }
 

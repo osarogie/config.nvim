@@ -150,8 +150,12 @@ local plugins = {
     "APZelos/blamer.nvim",
     lazy = false,
   },
+  -- {
+    -- "wellle/context.vim",
+    -- lazy = false,
+  -- },
   {
-    "wellle/context.vim",
+    "nvim-treesitter/nvim-treesitter-context",
     lazy = false,
   },
   {
@@ -192,10 +196,14 @@ local plugins = {
     "kdheepak/lazygit.nvim",
     lazy = false,
     -- optional for floating window border decoration
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    cmd = {
+    dependencies =  {
+      "nvim-telescope/telescope.nvim",
+      "nvim-lua/plenary.nvim"
+     },
+     config = function()
+       require("telescope").load_extension("lazygit")
+     end,
+     cmd = {
       "LazyGit",
       "LazyGitConfig",
       "LazyGitCurrentFile",

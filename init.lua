@@ -28,6 +28,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   command = "Neoformat prettier",
 })
 -- vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
+vim.cmd [[autocmd BufWritePre *.ts,*.tsx,*.js,*.jsx Neoformat]]
 vim.g.blamer_enabled = 1
 vim.g.blamer_delay = 300
 vim.g.blamer_relative_time = 1

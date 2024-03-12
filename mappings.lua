@@ -11,13 +11,9 @@ M.general = {
     [">"] = { ">gv", "indent"},
     ["<leader>gg"] = { ":LazyGit<CR>", opts = { silent = true } },
     ["<leader>g?"] = { ":lua vim.diagnostic.open_float()<CR>" },
-    -- " For local replace
--- nnoremap gr gd[{V%::s/<C-R>///gc<left><left><left>
-
--- " For global replace
--- nnoremap gR gD:%s/<C-R>///gc<left><left><left>
-    ["gr"] = { "gd[{V%::s/<C-R>///gc<left><left><left>" },
-    ["gR"] = { "gD:%s/<C-R>///gc<left><left><left>" }
+    ["<leader>tw"] = { ":set wrap<CR>", "set wrap" },
+    -- ["gr"] = { "gd[{V%::s/<C-R>///gc<left><left><left>" },
+    -- ["gR"] = { "gD:%s/<C-R>///gc<left><left><left>" }
   },
 }
 

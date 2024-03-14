@@ -12,6 +12,7 @@ M.treesitter = {
     "c",
     "markdown",
     "markdown_inline",
+    "python",
   },
   indent = {
     enable = true,
@@ -42,6 +43,15 @@ M.mason = {
     "clangd",
     "clang-format",
     "rust-analyzer",
+
+    "pyright", -- LSP for python
+    "ruff-lsp", -- linter for python (includes flake8, pep8, etc.)
+    "debugpy", -- debugger
+    "black", -- formatter
+    "isort", -- organize imports
+    "taplo", -- LSP for toml (for pyproject.toml files)
+    "mypy",
+    "ruff",
   },
 }
 

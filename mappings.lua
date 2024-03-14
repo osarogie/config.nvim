@@ -15,6 +15,13 @@ M.general = {
     ["<leader>tw"] = { ":set wrap<CR>", "set wrap" },
     -- ["gr"] = { "gd[{V%::s/<C-R>///gc<left><left><left>" },
     -- ["gR"] = { "gD:%s/<C-R>///gc<left><left><left>" }
+    ["<C-z>"] = { ":undo <CR>", "Undo"},
+  },
+  i = {
+    ["<C-z>"] = { "<C-o>u", "Undo" },
+  },
+  v = {
+    [">"] = { ">gv", "indent"},
   },
 }
 

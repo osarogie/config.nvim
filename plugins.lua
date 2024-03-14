@@ -12,17 +12,17 @@ local plugins = {
 
   -- Override plugin definition options
 
+  -- format & linting
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+    ft = { "python" },
+    opts = function()
+      return require "custom.configs.null-ls"
+    end,
+  },
+
   {
     "neovim/nvim-lspconfig",
-    dependencies = {
-      -- format & linting
-      {
-        "jose-elias-alvarez/null-ls.nvim",
-        config = function()
-          require "custom.configs.null-ls"
-        end,
-      },
-    },
     config = function()
       require "plugins.configs.lspconfig"
       require "custom.configs.lspconfig"
@@ -151,8 +151,8 @@ local plugins = {
     lazy = false,
   },
   -- {
-    -- "wellle/context.vim",
-    -- lazy = false,
+  -- "wellle/context.vim",
+  -- lazy = false,
   -- },
   {
     "nvim-treesitter/nvim-treesitter-context",
@@ -166,7 +166,7 @@ local plugins = {
     "ThePrimeagen/harpoon",
     branch = "harpoon2",
     lazy = false,
-    dependencies = { "nvim-lua/plenary.nvim" }
+    dependencies = { "nvim-lua/plenary.nvim" },
   },
   {
     "yko/mojo.vim",
@@ -196,20 +196,146 @@ local plugins = {
     "kdheepak/lazygit.nvim",
     lazy = false,
     -- optional for floating window border decoration
-    dependencies =  {
+    dependencies = {
       "nvim-telescope/telescope.nvim",
-      "nvim-lua/plenary.nvim"
-     },
-     config = function()
-       require("telescope").load_extension("lazygit")
-     end,
-     cmd = {
+      "nvim-lua/plenary.nvim",
+    },
+    config = function()
+      require("telescope").load_extension "lazygit"
+    end,
+    cmd = {
       "LazyGit",
       "LazyGitConfig",
       "LazyGitCurrentFile",
       "LazyGitFilter",
       "LazyGitFilterCurrentFile",
     },
+  },
+  -- Formatting client: conform.nvim
+  -- - configured to use black & isort in python
+  -- - use the taplo-LSP for formatting in toml
+  -- - Formatting is triggered via `<leader>f`, but also automatically on save
+  {
+    "stevearc/conform.nvim",
+    event = "BufWritePre", -- load the plugin before saving
+    keys = {
+      {
+        "<leader>f",
+        function()
+          require("conform").format { lsp_fallback = true }
+        end,
+        desc = "Format",
+      },
+    },
+    opts = {
+      formatters_by_ft = {
+        -- first use isort and then black
+        python = { "isort", "black" },
+        -- "inject" is a special formatter from conform.nvim, which
+        -- formats treesitter-injected code. Basically, this makes
+        -- conform.nvim format python codeblocks inside a markdown file.
+        markdown = { "inject" },
+      },
+      -- enable format-on-save
+      format_on_save = {
+        -- when no formatter is setup for a filetype, fallback to formatting
+        -- via the LSP. This is relevant e.g. for taplo (toml LSP), where the
+        -- LSP can handle the formatting for us
+        lsp_fallback = true,
+      },
+    },
+  },
+
+  -- PYTHON REPL
+  -- A basic REPL that opens up as a horizontal split
+  -- - use `<leader>i` to toggle the REPL
+  -- - use `<leader>I` to restart the REPL
+  -- - `+` serves as the "send to REPL" operator. That means we can use `++`
+  -- to send the current line to the REPL, and `+j` to send the current and the
+  -- following line to the REPL, like we would do with other vim operators.
+  {
+    "Vigemus/iron.nvim",
+    keys = {
+      { "<leader>i", vim.cmd.IronRepl, desc = "󱠤 Toggle REPL" },
+      { "<leader>I", vim.cmd.IronRestart, desc = "󱠤 Restart REPL" },
+
+      -- these keymaps need no right-hand-side, since that is defined by the
+      -- plugin config further below
+      { "+", mode = { "n", "x" }, desc = "󱠤 Send-to-REPL Operator" },
+      { "++", desc = "󱠤 Send Line to REPL" },
+    },
+
+    -- since irons's setup call is `require("iron.core").setup`, instead of
+    -- `require("iron").setup` like other plugins would do, we need to tell
+    -- lazy.nvim which module to via the `main` key
+    main = "iron.core",
+
+    opts = {
+      keymaps = {
+        send_line = "++",
+        visual_send = "+",
+        send_motion = "+",
+      },
+      config = {
+        -- this defined how the repl is opened. Here we set the REPL window
+        -- to open in a horizontal split to a bottom, with a height of 10
+        -- cells.
+        repl_open_cmd = "horizontal bot 10 split",
+
+        -- This defines which binary to use for the REPL. If `ipython` is
+        -- available, it will use `ipython`, otherwise it will use `python3`.
+        -- since the python repl does not play well with indents, it's
+        -- preferable to use `ipython` or `bypython` here.
+        -- (see: https://github.com/Vigemus/iron.nvim/issues/348)
+        repl_definition = {
+          python = {
+            command = function()
+              local ipythonAvailable = vim.fn.executable "ipython" == 1
+              local binary = ipythonAvailable and "ipython" or "python3"
+              return { binary }
+            end,
+          },
+        },
+      },
+    },
+  },
+
+  -- Configuration for the python debugger
+  -- - configures debugpy for us
+  -- - uses the debugpy installation from mason
+  {
+    "mfussenegger/nvim-dap-python",
+    dependencies = "mfussenegger/nvim-dap",
+    config = function()
+      -- uses the debugypy installation by mason
+      local debugpyPythonPath = require("mason-registry").get_package("debugpy"):get_install_path()
+        .. "/venv/bin/python3"
+      require("dap-python").setup(debugpyPythonPath, {})
+    end,
+  },
+
+  {
+    "max397574/better-escape.nvim",
+    event = "InsertEnter",
+    config = function()
+      require("better_escape").setup()
+    end,
+  },
+
+  -- lightspeed
+  {
+    "ggandor/lightspeed.nvim",
+    event = 'VeryLazy',
+  },
+
+  -- nvim-surround
+  {
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+        require("nvim-surround").setup({})
+    end
   },
 }
 

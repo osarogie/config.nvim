@@ -10,6 +10,7 @@ M.general = {
     ["<C-k>"] = { "<cmd> TmuxNavigateUp<CR>", "window up" },
     [">"] = { ">gv", "indent"},
     ["<leader>gg"] = { ":LazyGit<CR>", opts = { silent = true } },
+    ["<leader>gG"] = { ":LazyGitCurrentFile<CR>", opts = { silent = true } },
     ["<leader>g?"] = { ":lua vim.diagnostic.open_float()<CR>" },
     ["<leader>tw"] = { ":set wrap<CR>", "set wrap" },
     -- ["gr"] = { "gd[{V%::s/<C-R>///gc<left><left><left>" },

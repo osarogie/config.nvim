@@ -1,12 +1,5 @@
 local overrides = require "custom.configs.overrides"
 
-local function add_plugin(name, config)
-  return {
-    name,
-    config = config,
-  }
-end
-
 ---@type NvPluginSpec[]
 local plugins = {
 
@@ -15,7 +8,7 @@ local plugins = {
   -- format & linting
   {
     "jose-elias-alvarez/null-ls.nvim",
-    ft = { "python" },
+    ft = { "python", "go" },
     opts = function()
       return require "custom.configs.null-ls"
     end,
@@ -63,7 +56,7 @@ local plugins = {
   -- }
 
   -- Essential plugins
-  add_plugin "nvim-lua/popup.nvim",
+  { "nvim-lua/popup.nvim" },
 
   -- Autocompletion and LSP
   -- {
@@ -93,18 +86,24 @@ local plugins = {
   --   --   },
   --   -- },
   -- },
-  add_plugin("L3MON4D3/LuaSnip", function()
-    require("luasnip").config.setup {
-      -- Add LuaSnip configuration here
-    }
-  end),
+  {
+    "L3MON4D3/LuaSnip",
+    config = function()
+      require("luasnip").config.setup {
+        -- Add LuaSnip configuration here
+      }
+    end
+  },
 
   -- Git integration
-  add_plugin("lewis6991/gitsigns.nvim", function()
-    require("gitsigns").setup {
-      -- Add gitsigns configuration here
-    }
-  end),
+  {
+    "lewis6991/gitsigns.nvim",
+    config = function()
+      require("gitsigns").setup {
+        -- Add gitsigns configuration here
+      }
+    end
+  },
   -- {
   --   "zbirenbaum/copilot.lua",
   --   -- Lazy load when event occurs. Events are triggered
@@ -143,9 +142,9 @@ local plugins = {
     lazy = false,
   },
 
-  add_plugin "tpope/vim-fugitive",
-  add_plugin "Eliot00/git-lens.vim",
-  -- add_plugin("prettier/vim-prettier"),
+  { "tpope/vim-fugitive" },
+  { "Eliot00/git-lens.vim" },
+  -- { "prettier/vim-prettier" },
   {
     "APZelos/blamer.nvim",
     lazy = false,
@@ -167,9 +166,27 @@ local plugins = {
     branch = "harpoon2",
     lazy = false,
     dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require('harpoon').setup({})
+    end
   },
   {
     "yko/mojo.vim",
+  },
+  {
+    "mfussenegger/nvim-dap",
+    init = function()
+      require("core.utils").load_mappings("dap")
+    end
+  },
+  {
+    "dreamsofcode-io/nvim-dap-go",
+    ft = "go",
+    dependencies = "mfussenegger/nvim-dap",
+    config = function(_, opts)
+      require("dap-go").setup(opts)
+      require("core.utils").load_mappings("dap_go")
+    end
   },
   {
     "nvim-java/nvim-java",
@@ -309,7 +326,7 @@ local plugins = {
     config = function()
       -- uses the debugypy installation by mason
       local debugpyPythonPath = require("mason-registry").get_package("debugpy"):get_install_path()
-        .. "/venv/bin/python3"
+          .. "/venv/bin/python3"
       require("dap-python").setup(debugpyPythonPath, {})
     end,
   },
@@ -334,8 +351,19 @@ local plugins = {
     version = "*", -- Use for stability; omit to use `main` branch for the latest features
     event = "VeryLazy",
     config = function()
-        require("nvim-surround").setup({})
+      require("nvim-surround").setup({})
     end
+  },
+  {
+    "olexsmir/gopher.nvim",
+    ft = "go",
+    config = function(_, opts)
+      require("gopher").setup(opts)
+      require("core.utils").load_mappings("gopher")
+    end,
+    build = function()
+      vim.cmd [[silent! GoInstallDeps]]
+    end,
   },
 }
 

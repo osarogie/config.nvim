@@ -13,7 +13,7 @@ M.ui = {
   hl_add = highlights.add,
   statusline = {
     theme = "vscode"
-  }
+  },
 }
 
 M.plugins = "custom.plugins"

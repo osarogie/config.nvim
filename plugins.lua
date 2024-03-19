@@ -92,7 +92,7 @@ local plugins = {
       require("luasnip").config.setup {
         -- Add LuaSnip configuration here
       }
-    end
+    end,
   },
 
   -- Git integration
@@ -102,7 +102,7 @@ local plugins = {
       require("gitsigns").setup {
         -- Add gitsigns configuration here
       }
-    end
+    end,
   },
   -- {
   --   "zbirenbaum/copilot.lua",
@@ -167,8 +167,8 @@ local plugins = {
     lazy = false,
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-      require('harpoon').setup({})
-    end
+      require("harpoon").setup {}
+    end,
   },
   {
     "yko/mojo.vim",
@@ -176,8 +176,8 @@ local plugins = {
   {
     "mfussenegger/nvim-dap",
     init = function()
-      require("core.utils").load_mappings("dap")
-    end
+      require("core.utils").load_mappings "dap"
+    end,
   },
   {
     "dreamsofcode-io/nvim-dap-go",
@@ -185,8 +185,8 @@ local plugins = {
     dependencies = "mfussenegger/nvim-dap",
     config = function(_, opts)
       require("dap-go").setup(opts)
-      require("core.utils").load_mappings("dap_go")
-    end
+      require("core.utils").load_mappings "dap_go"
+    end,
   },
   {
     "nvim-java/nvim-java",
@@ -342,7 +342,7 @@ local plugins = {
   -- lightspeed
   {
     "ggandor/lightspeed.nvim",
-    event = 'VeryLazy',
+    event = "VeryLazy",
   },
 
   -- nvim-surround
@@ -351,15 +351,15 @@ local plugins = {
     version = "*", -- Use for stability; omit to use `main` branch for the latest features
     event = "VeryLazy",
     config = function()
-      require("nvim-surround").setup({})
-    end
+      require("nvim-surround").setup {}
+    end,
   },
   {
     "olexsmir/gopher.nvim",
     ft = "go",
     config = function(_, opts)
       require("gopher").setup(opts)
-      require("core.utils").load_mappings("gopher")
+      require("core.utils").load_mappings "gopher"
     end,
     build = function()
       vim.cmd [[silent! GoInstallDeps]]

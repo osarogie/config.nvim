@@ -16,11 +16,16 @@ local sources = {
   b.formatting.clang_format,
 
   b.formatting.black,
-  b.diagnostics.mypy,
+  b.diagnostics.mypy.with({
+    extra_args = function()
+      local virtual = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX") or "/usr"
+      return { "--python-executable", virtual .. "/bin/python3" }
+    end,
+  }),
   b.diagnostics.ruff,
 
   b.formatting.gofumpt,
-  b.formatting.imports_reviser,
+  b.formatting.goimports_reviser,
   b.formatting.golines,
 }
 

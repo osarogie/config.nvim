@@ -365,6 +365,39 @@ local plugins = {
       vim.cmd [[silent! GoInstallDeps]]
     end,
   },
+  "tpope/vim-dotenv",
+  "tpope/vim-rails",
+  "tpope/vim-bundler",
+  "tpope/vim-dispatch",
+  "tpope/vim-dadbod",
+  {
+    'kristijanhusak/vim-dadbod-ui',
+    config = function()
+      require("custom.configs.dadbod").setup()
+    end,
+    dependencies = {
+      {
+        'tpope/vim-dadbod',
+        lazy = true
+      },
+      {
+        'kristijanhusak/vim-dadbod-completion',
+        ft = { 'sql', 'mysql', 'plsql' },
+        lazy = true
+      },
+      { "tpope/vim-dotenv" },
+    },
+    cmd = {
+      'DBUI',
+      'DBUIToggle',
+      'DBUIAddConnection',
+      'DBUIFindBuffer',
+    },
+    init = function()
+      -- Your DBUI configuration
+      vim.g.db_ui_use_nerd_fonts = 1
+    end,
+  },
 }
 
 return plugins

@@ -16,6 +16,7 @@ M.general = {
     -- ["gr"] = { "gd[{V%::s/<C-R>///gc<left><left><left>" },
     -- ["gR"] = { "gD:%s/<C-R>///gc<left><left><left>" }
     ["<C-z>"] = { ":undo <CR>", "Undo" },
+    ["<leader>fi"] = { ":OrganizeImports<CR>", opts = { silent = true } },
   },
   i = {
     ["<C-z>"] = { "<C-o>u", "Undo" },

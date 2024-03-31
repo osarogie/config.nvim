@@ -6,14 +6,14 @@ local highlights = require "custom.highlights"
 
 M.ui = {
   theme = "catppuccin",
-  theme_toggle = { "catppuccin", "one_light" },
+  -- theme_toggle = { "catppuccin", "one_light" },
   transparency = true,
 
   hl_override = highlights.override,
   hl_add = highlights.add,
   statusline = {
     theme = "vscode"
-  },
+  }
 }
 
 M.plugins = "custom.plugins"

@@ -35,3 +35,4 @@ vim.g.blamer_relative_time = 1
 -- vim.g.context_enables = 1
 vim.g.neoformat_try_node_exe = 1
 -- vim.g.context_max_height = 5
+vim.g.zig_fmt_autosave = 0

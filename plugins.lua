@@ -57,35 +57,6 @@ local plugins = {
 
   -- Essential plugins
   { "nvim-lua/popup.nvim" },
-
-  -- Autocompletion and LSP
-  -- {
-  --   "hrsh7th/nvim-cmp",
-  --   -- dependencies = {
-  --   --   {
-  --   --     "zbirenbaum/copilot-cmp",
-  --   --     config = function()
-  --   --       require("copilot_cmp").setup()
-  --   --     end,
-  --   --   },
-  --   -- },
-  --   config = function()
-  --     -- require('cmp').setup({
-
-  --     -- })
-  --     require('custom.configs.nvim-cmp')
-  --   end,
-  --   -- opts = {
-  --   --   sources = {
-  --   --     { name = "copilot",  group_index = 2 },
-  --   --     { name = "nvim_lsp", group_index = 2 },
-  --   --     { name = "luasnip",  group_index = 2 },
-  --   --     { name = "buffer",   group_index = 2 },
-  --   --     { name = "nvim_lua", group_index = 2 },
-  --   --     { name = "path",     group_index = 2 },
-  --   --   },
-  --   -- },
-  -- },
   {
     "L3MON4D3/LuaSnip",
     config = function()
@@ -104,39 +75,6 @@ local plugins = {
       }
     end,
   },
-  -- {
-  --   "zbirenbaum/copilot.lua",
-  --   -- Lazy load when event occurs. Events are triggered
-  --   -- as mentioned in:
-  --   -- https://vi.stackexchange.com/a/4495/20389
-  --   event = "InsertEnter",
-  --   -- You can also have it load at immediately at
-  --   -- startup by commenting above and uncommenting below:
-  --   -- lazy = false
-  --   -- opts = overrides.copilot,
-  --   config = function()
-  --     require("copilot").setup({
-  --       -- Add copilot configuration here
-  --     })
-  --   end,
-  -- },
-  {
-    "github/copilot.vim",
-    event = "InsertEnter",
-    config = function()
-      -- require("copilot").setup({
-      --   -- Add copilot configuration here
-      -- })
-    end,
-  },
-  -- {
-  --   "zbirenbaum/copilot-cmp",
-  --   config = function ()
-  --     require("copilot_cmp").setup()
-  --   end,
-  --   event = { "InsertEnter", "LspAttach" },
-  --   fix_pairs = true,
-  -- },
   {
     "sbdchd/neoformat",
     lazy = false,
@@ -167,17 +105,11 @@ local plugins = {
     lazy = false,
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-      require("harpoon").setup {}
+      require("custom.configs.harpoon").setup()
     end,
   },
   {
     "yko/mojo.vim",
-  },
-  {
-    "mfussenegger/nvim-dap",
-    init = function()
-      require("core.utils").load_mappings "dap"
-    end,
   },
   {
     "dreamsofcode-io/nvim-dap-go",
@@ -237,7 +169,7 @@ local plugins = {
     event = "BufWritePre", -- load the plugin before saving
     keys = {
       {
-        "<leader>f",
+        "<leader>fr",
         function()
           require("conform").format { lsp_fallback = true }
         end,
@@ -365,6 +297,22 @@ local plugins = {
       vim.cmd [[silent! GoInstallDeps]]
     end,
   },
+  {
+    "linux-cultist/venv-selector.nvim",
+    dependencies = { "neovim/nvim-lspconfig", "nvim-telescope/telescope.nvim", "mfussenegger/nvim-dap-python" },
+    opts = {
+      -- Your options go here
+      -- name = "venv",
+      -- auto_refresh = false
+    },
+    event = "VeryLazy", -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
+    keys = {
+      -- Keymap to open VenvSelector to pick a venv.
+      { "<leader>vs", "<cmd>VenvSelect<cr>" },
+      -- Keymap to retrieve the venv from a cache (the one previously used for the same project directory).
+      { "<leader>vc", "<cmd>VenvSelectCached<cr>" },
+    },
+  },
   "tpope/vim-dotenv",
   "tpope/vim-rails",
   "tpope/vim-bundler",
@@ -397,6 +345,20 @@ local plugins = {
       -- Your DBUI configuration
       vim.g.db_ui_use_nerd_fonts = 1
     end,
+  },
+  "puremourning/vimspector",
+  "prisma/vim-prisma",
+  {
+    'stevearc/oil.nvim',
+    opts = {},
+    -- Optional dependencies
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("oil").setup()
+    end,
+    keys = {
+      { "-", "<CMD>Oil<CR>" },
+    },
   },
 }
 

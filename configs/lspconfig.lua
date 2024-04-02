@@ -28,8 +28,31 @@ lspconfig.pyright.setup {
   filetypes = { "python" },
 }
 
+local function organize_imports(client, bufnr)
+  local params = vim.lsp.util.make_range_params(nil, vim.lsp.util._get_offset_encoding())
+  params.context = { only = { "source.organizeImports" } }
+
+  local resp = client.request_sync("textDocument/codeAction", params, 3000, bufnr)
+  for _, r in pairs(resp and resp.result or {}) do
+    if r.edit then
+      vim.lsp.util.apply_workspace_edit(r.edit, vim.lsp.util._get_offset_encoding())
+    else
+      vim.lsp.buf.execute_command(r.command)
+    end
+  end
+end
+
 lspconfig.gopls.setup {
-  on_attach = on_attach,
+  on_attach = function(client, bufnr)
+    on_attach(client, bufnr)
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      buffer = bufnr,
+      callback = function()
+        organize_imports(client, bufnr)
+        vim.lsp.buf.format { async = false }
+      end,
+    })
+  end,
   capabilities = capabilities,
   cmd = { "gopls" },
   filetypes = { "go", "gomod", "gowork", "gotmpl" },
@@ -40,18 +63,18 @@ lspconfig.gopls.setup {
       usePlaceholders = true,
       analyses = {
         unusedparams = true,
-      }
-    }
-  }
+      },
+    },
+  },
 }
 
 lspconfig.zls.setup {}
 
-local function organize_imports()
+local function organize_ts_imports()
   local params = {
     command = "_typescript.organizeImports",
     arguments = { vim.api.nvim_buf_get_name(0) },
-    title = ""
+    title = "",
   }
   vim.lsp.buf.execute_command(params)
 end
@@ -61,8 +84,22 @@ lspconfig.tsserver.setup {
   capabilities = capabilities,
   commands = {
     OrganizeImports = {
-      organize_imports,
-      description = "Organize Imports"
-    }
-  }
+      organize_imports = organize_ts_imports,
+      description = "Organize Imports",
+    },
+  },
+}
+
+lspconfig.terraformls.setup {
+  on_attach = function(client, bufnr)
+    on_attach(client, bufnr)
+    vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+      buffer = bufnr,
+      pattern = { "*.tf", "*.tfvars" },
+      callback = function()
+        vim.lsp.buf.format()
+      end,
+    })
+  end,
+  capabilities = capabilities,
 }

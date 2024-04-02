@@ -1,32 +1,45 @@
 local null_ls = require "null-ls"
 
-local b = null_ls.builtins
+local fmt = null_ls.builtins.formatting
+local dgn = null_ls.builtins.diagnostics
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
 local sources = {
-
+  fmt.trim_whitespace.with {
+    filetypes = { "text", "sh", "zsh", "toml", "make", "conf", "tmux" },
+  },
   -- webdev stuff
-  b.formatting.deno_fmt,                                                                                                                           -- choosed deno for ts/js files cuz its very fast!
-  b.formatting.prettier.with { filetypes = { "html", "markdown", "css", "javascriptreact", "javascriptreact", "typescript", "typescriptreact" } }, -- so prettier works only on these filetypes
+  fmt.deno_fmt, -- choosed deno for ts/js files cuz its very fast!
+  fmt.prettierd,
+  fmt.prettier.with {
+    filetypes = { "html", "markdown", "css", "javascriptreact", "javascriptreact", "typescript", "typescriptreact" },
+  }, -- so prettier works only on these filetypes
 
   -- Lua
-  b.formatting.stylua,
+  fmt.stylua,
 
   -- cpp
-  b.formatting.clang_format,
+  fmt.clang_format,
 
-  b.formatting.black,
-  b.diagnostics.mypy.with({
+  fmt.black,
+  dgn.mypy.with {
     extra_args = function()
-      local virtual = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX") or "/usr"
+      local virtual = os.getenv "VIRTUAL_ENV" or os.getenv "CONDA_PREFIX" or "/usr"
       return { "--python-executable", virtual .. "/bin/python3" }
     end,
-  }),
-  b.diagnostics.ruff,
+  },
+  dgn.ruff,
 
-  b.formatting.gofumpt,
-  b.formatting.goimports_reviser,
-  b.formatting.golines,
+  fmt.gofumpt,
+  fmt.goimports_reviser,
+  fmt.golines,
+  fmt.terraform_fmt,
+  fmt.eslint_d,
+  dgn.eslint_d,
+  dgn.shellcheck,
+  dgn.luacheck.with {
+    extra_args = { "--globals", "vim", "--std", "luajit" },
+  },
 }
 
 local opts = {

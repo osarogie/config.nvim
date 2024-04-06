@@ -319,27 +319,27 @@ local plugins = {
   "tpope/vim-dispatch",
   "tpope/vim-dadbod",
   {
-    'kristijanhusak/vim-dadbod-ui',
+    "kristijanhusak/vim-dadbod-ui",
     config = function()
       require("custom.configs.dadbod").setup()
     end,
     dependencies = {
       {
-        'tpope/vim-dadbod',
-        lazy = true
+        "tpope/vim-dadbod",
+        lazy = true,
       },
       {
-        'kristijanhusak/vim-dadbod-completion',
-        ft = { 'sql', 'mysql', 'plsql' },
-        lazy = true
+        "kristijanhusak/vim-dadbod-completion",
+        ft = { "sql", "mysql", "plsql" },
+        lazy = true,
       },
       { "tpope/vim-dotenv" },
     },
     cmd = {
-      'DBUI',
-      'DBUIToggle',
-      'DBUIAddConnection',
-      'DBUIFindBuffer',
+      "DBUI",
+      "DBUIToggle",
+      "DBUIAddConnection",
+      "DBUIFindBuffer",
     },
     init = function()
       -- Your DBUI configuration
@@ -349,12 +349,16 @@ local plugins = {
   "puremourning/vimspector",
   "prisma/vim-prisma",
   {
-    'stevearc/oil.nvim',
+    "stevearc/oil.nvim",
     opts = {},
     -- Optional dependencies
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
-      require("oil").setup()
+      require("oil").setup {
+        view_options = {
+          show_hidden = true,
+        },
+      }
     end,
     keys = {
       { "-", "<CMD>Oil<CR>" },

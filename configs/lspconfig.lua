@@ -84,7 +84,7 @@ lspconfig.tsserver.setup {
   capabilities = capabilities,
   commands = {
     OrganizeImports = {
-      organize_imports = organize_ts_imports,
+      organize_ts_imports,
       description = "Organize Imports",
     },
   },

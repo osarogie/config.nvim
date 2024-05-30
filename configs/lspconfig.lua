@@ -80,7 +80,12 @@ local function organize_ts_imports()
 end
 
 lspconfig.tsserver.setup {
-  on_attach = on_attach,
+  on_attach = function(client, bufnr)
+    on_attach(client, bufnr)
+    if client.server_capabilities.inlayHintProvider then
+      vim.lsp.inlay_hint.enable(bufnr, true)
+    end
+  end,
   capabilities = capabilities,
   commands = {
     OrganizeImports = {
@@ -102,4 +107,15 @@ lspconfig.terraformls.setup {
     })
   end,
   capabilities = capabilities,
+}
+
+lspconfig.jsonls.setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  settings = {
+    json = {
+      schemas = require('schemastore').json.schemas(),
+      validate = { enable = true },
+    }
+  }
 }

@@ -29,13 +29,13 @@ lspconfig.pyright.setup {
 }
 
 local function organize_imports(client, bufnr)
-  local params = vim.lsp.util.make_range_params(nil, vim.lsp.util._get_offset_encoding())
+  local params = vim.lsp.util.make_range_params(nil, vim.lsp.util._get_offset_encoding(bufnr))
   params.context = { only = { "source.organizeImports" } }
 
   local resp = client.request_sync("textDocument/codeAction", params, 3000, bufnr)
   for _, r in pairs(resp and resp.result or {}) do
     if r.edit then
-      vim.lsp.util.apply_workspace_edit(r.edit, vim.lsp.util._get_offset_encoding())
+      vim.lsp.util.apply_workspace_edit(r.edit, vim.lsp.util._get_offset_encoding(bufnr))
     else
       vim.lsp.buf.execute_command(r.command)
     end
@@ -83,7 +83,7 @@ lspconfig.tsserver.setup {
   on_attach = function(client, bufnr)
     on_attach(client, bufnr)
     if client.server_capabilities.inlayHintProvider then
-      vim.lsp.inlay_hint.enable(bufnr, true)
+      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
     end
   end,
   capabilities = capabilities,
@@ -91,6 +91,34 @@ lspconfig.tsserver.setup {
     OrganizeImports = {
       organize_ts_imports,
       description = "Organize Imports",
+    },
+  },
+  completions = {
+    completeFunctionCalls = true,
+  },
+  settings = {
+    javascript = {
+      inlayHints = {
+        includeInlayEnumMemberValueHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+        includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayVariableTypeHints = false,
+      },
+    },
+
+    typescript = {
+      inlayHints = {
+        includeInlayEnumMemberValueHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+        includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayVariableTypeHints = false,
+      },
     },
   },
 }
